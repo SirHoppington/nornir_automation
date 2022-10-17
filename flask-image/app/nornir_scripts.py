@@ -13,6 +13,7 @@ nr = InitNornir(
 #Get configuration for all hosts
 config = nr.run(name="Get Configurations",task=get_config)
 print_title(config)
+print_result(config)
 
 #Parse Configuration from config_parsers.py file
 parsed = nr.run(name="Parse Configurations", task=parse_config)

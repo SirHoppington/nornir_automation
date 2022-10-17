@@ -1,6 +1,9 @@
 from nornir_utils.plugins.functions import print_result, print_title
 from nornir_napalm.plugins.tasks import napalm_get, napalm_cli, napalm_configure
 from nornir.core.task import Task
+from ttp import ttp
+from nornir_jinja2.plugins.tasks.template_file import  template_file
+import logging
 
 # Get config from devices and save as new dictionary entry on host
 def get_config(task):
@@ -33,9 +36,9 @@ def parse_config(task):
                         if i['ip_address'] in i.keys()]
 
 def build_configs(task):
-    r = task.run(task=text.template_file,
+    r = task.run(task=template_file,
         name="New Configuration",
-        template="router_template.j2",
+        template="router_template.jinja2",
         path=f"COnfig",
         access_ports=task.host['access_ports'],
         trunk_ports=task.host['trunk_ports'],
