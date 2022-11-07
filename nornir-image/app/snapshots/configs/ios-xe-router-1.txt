@@ -1,0 +1,575 @@
+hostname rtr-01
+!
+vrf definition VRF-01
+ rd 10.4.1.7:470
+ !
+ address-family ipv4
+  route-target export 51551:470
+  route-target import 51551:470
+ exit-address-family
+!
+vrf definition MGMT
+ rd 10.4.1.7:2047
+ !
+ address-family ipv4
+  route-target export 51551:2047
+  route-target import 51551:2047
+ exit-address-family
+!
+spanning-tree mode rapid-pvst
+spanning-tree portfast default
+spanning-tree extend system-id
+spanning-tree vlan 1400-1408, 1450, 1508, 2047 priority 4096
+!
+interface Loopback0
+ description GRT Looback
+ ip address 10.4.1.7 255.255.255.255
+ ip ospf 1 area 0
+!
+interface range GigabitEthernet0/0/1 - GigabitEthernet0/0/24
+  service instance 666 ethernet
+  encapsulation untagged
+  bridge-domain 666
+ no logging event link-status
+!
+interface GigabitEthernet0/0/0
+service instance 2047 ethernet
+encapsulation untagged
+bridge-domain 2047
+!
+interface GigabitEthernet0/0/2
+ description to FW1 MGMT
+service instance 2047 ethernet
+encapsulation untagged
+bridge-domain 2047
+!
+interface GigabitEthernet0/0/3
+ service-policy input CPE-QOS--CUSTOMER-IN
+ description to FW1 E1 L3
+  service instance 1400 ethernet
+  description connection to FW1
+  encapsulation dot1q 1400
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1400
+!
+ interface GigabitEthernet0/0/5
+ description to SW01-A Gi0-48-L2
+service instance 1400 ethernet
+  encapsulation dot1q 1400
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1400
+ !
+ service instance 1401 ethernet
+  encapsulation dot1q 1401
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1401
+ !
+ service instance 1402 ethernet
+  encapsulation dot1q 1402
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1402
+ !
+ service instance 1403 ethernet
+  encapsulation dot1q 1403
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1403
+ !
+ service instance 1404 ethernet
+  encapsulation dot1q 1404
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1404
+ !
+ service instance 1405 ethernet
+  encapsulation dot1q 1405
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1405
+ !
+ service instance 1406 ethernet
+  encapsulation dot1q 1406
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1406
+ !
+ service instance 1407 ethernet
+  encapsulation dot1q 1407
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1407
+ !
+ service instance 1408 ethernet
+  encapsulation dot1q 1408
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1408
+ !
+ service instance 1450 ethernet
+  encapsulation dot1q 1450
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1450
+ !
+ service instance 1460 ethernet
+  encapsulation dot1q 1460
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1460
+ !
+ service instance 1508 ethernet
+  encapsulation dot1q 1508
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1508
+ !
+ service instance 2047 ethernet
+  encapsulation dot1q 2047
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 2047
+!
+interface GigabitEthernet0/6
+ description Link to Z5-SW02
+service instance 1400 ethernet
+  encapsulation dot1q 1400
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1400
+ !
+ service instance 1401 ethernet
+  encapsulation dot1q 1401
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1401
+ !
+ service instance 1402 ethernet
+  encapsulation dot1q 1402
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1402
+ !
+ service instance 1403 ethernet
+  encapsulation dot1q 1403
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1403
+ !
+ service instance 1404 ethernet
+  encapsulation dot1q 1404
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1404
+ !
+ service instance 1405 ethernet
+  encapsulation dot1q 1405
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1405
+ !
+ service instance 1406 ethernet
+  encapsulation dot1q 1406
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1406
+ !
+ service instance 1407 ethernet
+  encapsulation dot1q 1407
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1407
+ !
+ service instance 1408 ethernet
+  encapsulation dot1q 1408
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1408
+ !
+ service instance 1450 ethernet
+  encapsulation dot1q 1450
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1450
+ !
+ service instance 1460 ethernet
+  encapsulation dot1q 1460
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1460
+ !
+ service instance 1508 ethernet
+  encapsulation dot1q 1508
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1508
+ !
+ service instance 2047 ethernet
+  encapsulation dot1q 2047
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 2047
+!
+interface GigabitEthernet0/0/7
+ description to Z5-SW03
+ no ip address
+ negotiation auto
+ service instance 1400 ethernet
+  encapsulation dot1q 1401
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1401
+ !
+ service instance 1508 ethernet
+  encapsulation dot1q 1508
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1508
+  !
+   service instance 2047 ethernet
+  encapsulation dot1q 2047
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 2047
+!
+interface GigabitEthernet0/0/9
+ description to TO-PE02 Gi0-0-9
+ dampening
+ mtu 1600
+ ip address 10.12.1.41 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
+ ip ospf message-digest-key 1 md5 7 03217823253D02
+ ip ospf network point-to-point
+ ip ospf dead-interval 10
+ ip ospf hello-interval 3
+ ip ospf bfd
+ ip ospf 1 area 0
+ carrier-delay msec 0
+ mpls ip
+ mpls traffic-eng tunnels
+ bfd interval 50 min_rx 50 multiplier 3
+!
+interface GigabitEthernet0/0/10
+ description to PE02 Gi0-10-L2
+ service instance 1400 ethernet
+  encapsulation dot1q 1400
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1400
+ !
+ service instance 1401 ethernet
+  encapsulation dot1q 1401
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1401
+ !
+ service instance 1402 ethernet
+  encapsulation dot1q 1402
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1402
+ !
+ service instance 1403 ethernet
+  encapsulation dot1q 1403
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1403
+ !
+ service instance 1404 ethernet
+  encapsulation dot1q 1404
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1404
+ !
+ service instance 1405 ethernet
+  encapsulation dot1q 1405
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1405
+ !
+ service instance 1406 ethernet
+  encapsulation dot1q 1406
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1406
+ !
+ service instance 1407 ethernet
+  encapsulation dot1q 1407
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1407
+ !
+ service instance 1408 ethernet
+  encapsulation dot1q 1408
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1408
+ !
+ service instance 1450 ethernet
+  encapsulation dot1q 1450
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1450
+ !
+ service instance 1460 ethernet
+  encapsulation dot1q 1460
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1460
+ !
+ service instance 1508 ethernet
+  encapsulation dot1q 1508
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 1508
+ !
+ service instance 2047 ethernet
+  encapsulation dot1q 2047
+  rewrite ingress tag pop 1 symmetric
+  bridge-domain 2047
+!
+!
+interface GigabitEthernet0/0/11
+ description to PE02 Gi0-0-11-L3
+ dampening
+ mtu 1600
+ bandwidth 100000
+ ip address 10.12.1.13 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
+ ip ospf message-digest-key 1 md5 7 09696D213A3734
+ ip ospf network point-to-point
+ ip ospf dead-interval 10
+ ip ospf hello-interval 3
+ ip ospf bfd
+ ip ospf 1 area 0
+ carrier-delay msec 0
+ mpls ip
+ mpls traffic-eng tunnels
+ bfd interval 50 min_rx 50 multiplier 3
+ service-policy input PE-QOS-PSN-MPLS-IN
+ service-policy output PE-QOS-PSN-MPLS-OUT
+!
+interface GigabitEthernet0/0/12
+ description to PE02 Gi0-24-L3
+ dampening
+ mtu 1600
+ ip address 10.12.1.10 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
+ ip ospf message-digest-key 1 md5 7 047E282E2C136F
+ ip ospf network point-to-point
+ ip ospf dead-interval 10
+ ip ospf hello-interval 3
+ ip ospf bfd
+ ip ospf 1 area 0
+ carrier-delay msec 0
+ mpls ip
+ mpls traffic-eng tunnels
+ bfd interval 50 min_rx 50 multiplier 3
+ service-policy input PE-QOS-PSN-MPLS-IN
+ service-policy output PE-QOS-PSN-MPLS-OUT
+!
+interface BDI1400
+ description TO-FW
+ ip vrf forwarding VRF-01
+ ip address 10.25.4.2 255.255.255.248
+ standby 140 ip 10.25.4.1
+ standby 140 timers 1 3
+ standby 140 preempt
+ standby 140 authentication 1400
+!
+interface BDI1401
+ description Zone - Production
+ ip vrf forwarding VRF-01
+ ip address 10.25.144.2 255.255.255.0
+ standby 141 ip 10.25.144.1
+ standby 141 timers 1 3
+ standby 141 preempt
+ standby 141 authentication 401
+!
+interface BDI1402
+ description Zone - Server Management
+ ip vrf forwarding VRF-01
+ ip address 10.25.145.2 255.255.255.0
+ standby 142 ip 10.25.145.1
+ standby 142 timers 1 3
+ standby 142 preempt
+ standby 142 authentication 1402
+!
+interface BDI1403
+ description Zone - SQL Heartbeat
+ ip vrf forwarding VRF-01
+ ip address 10.25.146.2 255.255.255.192
+ standby 143 ip 10.25.146.1
+ standby 143 timers 1 3
+ standby 143 preempt
+ standby 143 authentication 1403
+!
+interface BDI1404
+ description Zone - SQL Replication
+ ip vrf forwarding VRF-01
+ ip address 10.25.146.66 255.255.255.192
+ standby 144 ip 10.25.146.65
+ standby 144 timers 1 3
+ standby 144 preempt
+ standby 144 authentication 1404
+!
+interface BDI1405
+ description Zone - Hyper V CSV
+ ip vrf forwarding VRF-01
+ ip address 10.25.146.130 255.255.255.192
+ standby 145 ip 10.25.146.129
+ standby 145 timers 1 3
+ standby 145 preempt
+ standby 145 authentication 1405
+!
+interface BDI1406
+ description Zone - Hyper V Live Migrate
+ ip vrf forwarding VRF-01
+ ip address 10.25.146.194 255.255.255.192
+ standby 146 ip 10.25.146.193
+ standby 146 timers 1 3
+ standby 146 preempt
+ standby 146 authentication 1406
+!
+interface BDI1407
+ description Zone - 3PAR Replication
+ ip vrf forwarding VRF-01
+ ip address 10.25.147.2 255.255.255.192
+ standby 147 ip 10.25.147.1
+ standby 147 timers 1 3
+ standby 147 preempt
+ standby 147 authentication 1407
+!
+interface BDI1408
+ description Zone 5 - Production Clients
+ ip vrf forwarding VRF-01
+ ip address 10.25.152.2 255.255.252.0
+ standby 148 ip 10.25.152.1
+ standby 148 timers 1 3
+ standby 148 preempt
+ standby 148 authentication 1408
+!
+interface BDI1450
+ description CUST Zone - Production
+ ip vrf forwarding VRF-01
+ ip address 10.25.156.2 255.255.252.0
+ standby 141 ip 10.25.156.1
+ standby 141 timers 1 3
+ standby 141 preempt
+!
+interface BDI1508
+ description Zone -  WAN Transit
+ ip vrf forwarding VRF-01
+ ip address 10.25.161.2 255.255.255.248
+ standby 158 ip 10.25.161.1
+ standby 158 timers 1 3
+ standby 158 preempt
+ standby 158 authentication 1508
+!
+interface BDI2047
+ description MGMT-INTERFACE-MGMT
+ ip vrf forwarding MGMT
+ ip address 10.238.4.2 255.255.255.0
+ standby 247 ip 10.238.4.1
+ standby 247 timers 1 3
+ standby 247 preempt
+ standby 247 authentication MGMT
+!
+router ospf 1
+ router-id 10.4.1.7
+ ispf
+ auto-cost reference-bandwidth 1000000
+ prefix-suppression
+ prefix-priority high route-map OSPF-SPF-PRIORITY
+ fast-reroute per-prefix enable prefix-priority high
+ fast-reroute per-prefix remote-lfa tunnel mpls-ldp
+ area 0 authentication message-digest
+ timers throttle spf 50 50 5000
+ timers throttle lsa 10 20 5000
+ timers lsa arrival 15
+ timers pacing flood 15
+ passive-interface default
+ no passive-interface GigabitEthernet0/0/9
+ no passive-interface GigabitEthernet0/0/11
+ no passive-interface GigabitEthernet0/0/12
+ maximum-paths 1
+ bfd all-interfaces
+ mpls ldp sync
+ mpls traffic-eng router-id Loopback0
+ mpls traffic-eng area 0
+!
+router bgp 65001
+ bgp router-id 10.4.1.7
+ bgp log-neighbor-changes
+ neighbor 10.4.1.1 inherit peer-session IBGP
+ neighbor 10.4.1.1 description CUST-LOC1-PE01
+ neighbor 10.4.1.2 inherit peer-session IBGP
+ neighbor 10.4.1.2 description CUST-LOC1-PE02
+ neighbor 10.4.1.5 inherit peer-session IBGP
+ neighbor 10.4.1.5 description CUST-LOC2-PE01
+ neighbor 10.4.1.6 inherit peer-session IBGP
+ neighbor 10.4.1.6 description CUST-LOC2-PE02
+ neighbor 10.4.1.8 inherit peer-session IBGP
+ neighbor 10.4.1.8 description CUST-LOC3-PE02
+ neighbor 10.4.1.9 inherit peer-session IBGP
+ neighbor 10.4.1.9 description CUST-LOC1-OCC-PE01
+ neighbor 10.4.1.10 inherit peer-session IBGP
+ neighbor 10.4.1.10 description CUST-LOC1-OCC-PE01
+ neighbor 10.4.1.11 inherit peer-session IBGP
+ neighbor 10.4.1.11 description CUST-LOC1-OCC-PE01
+ neighbor 10.4.1.12 inherit peer-session IBGP
+ neighbor 10.4.1.12 description CUST-LOC1-OCC-PE01
+ neighbor 10.4.1.13 inherit peer-session IBGP
+ neighbor 10.4.1.13 description CUST-LOC2-PE03
+ neighbor 10.4.1.14 inherit peer-session IBGP
+ neighbor 10.4.1.14 description CUST-LOC2-PE04
+ !
+ address-family ipv4
+  bgp nexthop trigger delay 1
+  redistribute connected route-map REDIST-CONNECTED-TO-BGP-IPV4
+  redistribute static route-map REDIST-STATIC-TO-BGP-IPV4
+  neighbor 10.4.1.1 activate
+  neighbor 10.4.1.1 inherit peer-policy MESH-IBGP-IPV4
+  neighbor 10.4.1.2 activate
+  neighbor 10.4.1.2 inherit peer-policy MESH-IBGP-IPV4
+  neighbor 10.4.1.5 activate
+  neighbor 10.4.1.5 inherit peer-policy MESH-IBGP-IPV4
+  neighbor 10.4.1.6 activate
+  neighbor 10.4.1.6 inherit peer-policy MESH-IBGP-IPV4
+  neighbor 10.4.1.8 activate
+  neighbor 10.4.1.8 inherit peer-policy MESH-IBGP-IPV4
+  neighbor 10.4.1.9 activate
+  neighbor 10.4.1.9 inherit peer-policy MESH-IBGP-IPV4
+  neighbor 10.4.1.10 activate
+  neighbor 10.4.1.10 inherit peer-policy MESH-IBGP-IPV4
+  neighbor 10.4.1.11 activate
+  neighbor 10.4.1.11 inherit peer-policy MESH-IBGP-IPV4
+  neighbor 10.4.1.12 activate
+  neighbor 10.4.1.12 inherit peer-policy MESH-IBGP-IPV4
+  neighbor 10.4.1.13 activate
+  neighbor 10.4.1.13 inherit peer-policy MESH-IBGP-IPV4
+  neighbor 10.4.1.14 activate
+  neighbor 10.4.1.14 inherit peer-policy MESH-IBGP-IPV4
+ exit-address-family
+ !
+ address-family vpnv4
+  bgp nexthop trigger delay 1
+  neighbor 10.4.1.1 activate
+  neighbor 10.4.1.1 send-community extended
+  neighbor 10.4.1.1 inherit peer-policy MESH-IBGP-VPNV4
+  neighbor 10.4.1.2 activate
+  neighbor 10.4.1.2 send-community extended
+  neighbor 10.4.1.2 inherit peer-policy MESH-IBGP-VPNV4
+  neighbor 10.4.1.5 activate
+  neighbor 10.4.1.5 send-community extended
+  neighbor 10.4.1.5 inherit peer-policy MESH-IBGP-VPNV4
+  neighbor 10.4.1.6 activate
+  neighbor 10.4.1.6 send-community extended
+  neighbor 10.4.1.6 inherit peer-policy MESH-IBGP-VPNV4
+  neighbor 10.4.1.8 activate
+  neighbor 10.4.1.8 send-community extended
+  neighbor 10.4.1.8 inherit peer-policy MESH-IBGP-VPNV4
+  neighbor 10.4.1.9 activate
+  neighbor 10.4.1.9 send-community extended
+  neighbor 10.4.1.9 inherit peer-policy MESH-IBGP-VPNV4
+  neighbor 10.4.1.10 activate
+  neighbor 10.4.1.10 send-community extended
+  neighbor 10.4.1.10 inherit peer-policy MESH-IBGP-VPNV4
+  neighbor 10.4.1.11 activate
+  neighbor 10.4.1.11 send-community extended
+  neighbor 10.4.1.11 inherit peer-policy MESH-IBGP-VPNV4
+  neighbor 10.4.1.12 activate
+  neighbor 10.4.1.12 send-community extended
+  neighbor 10.4.1.12 inherit peer-policy MESH-IBGP-VPNV4
+  neighbor 10.4.1.13 activate
+  neighbor 10.4.1.13 send-community extended
+  neighbor 10.4.1.13 inherit peer-policy MESH-IBGP-VPNV4
+  neighbor 10.4.1.14 activate
+  neighbor 10.4.1.14 send-community extended
+  neighbor 10.4.1.14 inherit peer-policy MESH-IBGP-VPNV4
+ exit-address-family
+ !
+ address-family ipv4 vrf VRF-01
+  redistribute connected
+  redistribute static
+ exit-address-family
+ !
+ address-family ipv4 vrf MGMT
+  redistribute connected
+ exit-address-family
+!
+ip route vrf VRF-01 10.1.0.0 255.255.0.0 10.25.4.6
+ip route vrf VRF-01 10.2.1.0 255.255.255.0 10.25.4.6
+ip route vrf VRF-01 10.2.2.0 255.255.255.0 10.25.4.6
+ip route vrf VRF-01 10.2.10.0 255.255.254.0 10.25.4.6
+ip route vrf VRF-01 10.10.0.0 255.255.0.0 10.25.4.6
+ip route vrf VRF-01 10.20.8.0 255.255.255.0 10.25.4.6
+ip route vrf VRF-01 10.25.128.0 255.255.192.0 10.25.4.6
+ip route vrf VRF-01 10.25.156.0 255.255.252.0 10.25.4.6
+ip route vrf VRF-01 10.25.160.0 255.255.255.0 10.25.161.6
+ip route vrf VRF-01 0.0.0.0 0.0.0.0 10.25.4.6 254
+!

@@ -16,24 +16,28 @@ def get_config(task):
 # Function to pass running config via TTP "interfaces" template
 # and return a dictionary with the respective configuration from the config
 def parse_interface(config):
-    parser = ttp(data=config, template='ttp/interfaces.j2')
+    parser = ttp(data=config, template='ttp/interfaces.jinja2')
     parser.parse()
     interfaces = parser.result()[0][0]
     return interfaces
+    print(interfaces)
 
 def parse_config(task):
+
+    task.host['ints'] = parse_interface(task.host['config'])
+    print(task.host['ints'])
     # list comprehension to save interfaces as new key "ints" in host object.
-    task.host['ints'] = [i for i in parse_interface(task.host['config'])
-                             if 'mode' in i.keys()]
+    #task.host['ints'] = [i for i in parse_interface(task.host['config'])
+    #                         if 'mode' in i.keys()]
     # list comprehension to save access ports to a new key in host object.
-    task.host['access_ports'] = [i for i in task.host['ints']
-                                      if i['mode'] == 'access']
+    #task.host['access_ports'] = [i for i in task.host['ints']
+    #                                  if i['mode'] == 'access']
     # list comprehension to save trunk as a new key in host object.
-    task.host['trunk_ports'] = [i for i in task.host['ints']
-                                     if i['mode'] == 'trunk']
+    #task.host['trunk_ports'] = [i for i in task.host['ints']
+    #                                 if i['mode'] == 'trunk']
     # list comprehension to save SVI if the interface has an ip address
-    task.host['SVI'] = [i for i in parse_interface(task.host['config'])
-                        if i['ip_address'] in i.keys()]
+    #task.host['SVI'] = [i for i in parse_interface(task.host['config'])
+    #                    if i['ip_address'] in i.keys()]
 
 def build_configs(task):
     r = task.run(task=template_file,
