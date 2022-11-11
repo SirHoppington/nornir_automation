@@ -4,7 +4,7 @@ from nornir_salt.plugins.functions import FFun
 from nornir_utils.plugins.functions import print_result
 from nornir_napalm.plugins.tasks import napalm_get, napalm_cli, napalm_configure
 from nornir.core.task import Task
-from utilities.check_config_changes import compare_changes
+from utilities.check_config_changes import fetch_change_devices
 from backup_script import post_change_backup
 
 
@@ -28,24 +28,22 @@ args = parser.parse_args()
 
 # Deploy network configuration task to hosts
 def deploy_network(task):
-    #dev = f"./crq_configs/{task.host.name}.txt"
     dev = task.host.name
     device= dev[4:]
-    print(device)
     """Configures network with NAPALM"""
     task.run(
         name=f"Configuring {task.host.name}!",
         task=napalm_configure,
         filename=f"./crq_configs/{device}.txt",
         dry_run=args.dry,
-        replace=True
+        replace=False
     )
 
 
 def main():
     nr = InitNornir(
         config_file="config.yaml")
-    crqs = compare_changes()
+    crqs = fetch_change_devices()
     dev_devices = [ f'dev-{x}' for x in crqs]
     filtered_hosts = FFun(nr, FL=dev_devices)
     result = filtered_hosts.run(task=deploy_network)

@@ -143,6 +143,7 @@ archive
  path bootflash:archive
  write-memory
 memory free low-watermark processor 72107
+file prompt quiet
 !
 !
 spanning-tree extend system-id
@@ -186,13 +187,12 @@ interface GigabitEthernet2
  no mop sysid
 !
 interface GigabitEthernet3
- no ip address
+ ip address 200.0.0.1 255.255.255.0
  shutdown
  negotiation auto
  no keepalive
  no mop enabled
  no mop sysid
- xconnect 1.1.1.1 10 encapsulation mpls
 !
 interface GigabitEthernet4
  no ip address

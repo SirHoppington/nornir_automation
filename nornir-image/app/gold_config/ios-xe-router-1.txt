@@ -143,6 +143,7 @@ archive
  path bootflash:archive
  write-memory
 memory free low-watermark processor 72107
+file prompt quiet
 !
 !
 spanning-tree extend system-id
@@ -190,7 +191,7 @@ interface GigabitEthernet2
  no mop sysid
 !
 interface GigabitEthernet3
- no ip address
+ ip address 200.0.0.110 255.255.255.0
  shutdown
  negotiation auto
  no mop enabled

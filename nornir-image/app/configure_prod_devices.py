@@ -4,7 +4,7 @@ from nornir_salt.plugins.functions import FFun
 from nornir_utils.plugins.functions import print_result
 from nornir_napalm.plugins.tasks import napalm_get, napalm_cli, napalm_configure
 from nornir.core.task import Task
-from utilities.check_config_changes import compare_changes
+from utilities.check_config_changes import fetch_change_devices
 from backup_script import post_change_backup
 
 
@@ -34,14 +34,14 @@ def deploy_network(task):
         task=napalm_configure,
         filename=f"./crq_configs/{task.host.name}.txt",
         dry_run=args.dry,
-        replace=True
+        replace=False
     )
 
 
 def main():
     nr = InitNornir(
         config_file="config.yaml")
-    crqs = compare_changes()
+    crqs = fetch_change_devices()
     filtered_hosts = FFun(nr, FL=crqs)
     result = filtered_hosts.run(task=deploy_network)
     print_result(result)

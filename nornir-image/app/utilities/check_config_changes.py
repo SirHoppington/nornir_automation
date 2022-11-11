@@ -3,19 +3,16 @@ import filecmp
 
 
 # Compare the files in crq_configs and snapshots/configs
-def compare_changes():
-    d1 = "./gold_config/"
-    d2 = "./crq_configs/"
+def fetch_change_devices():
     files = []
-    for file in os.listdir("./gold_config/"):
+    for file in os.listdir("./crq_configs"):
         files.append(file)
-    results = filecmp.cmpfiles(d1, d2, files, shallow=True)
-    hostnames = [os.path.splitext(x)[0] for x in results[1]]
+    hostnames = [os.path.splitext(x)[0] for x in files]
     return hostnames
 
 
 def main():
-    compare_changes()
+    fetch_change_devices()
 
 
 if __name__ == "__main__":
