@@ -1,8 +1,21 @@
-ios-router-1:
+ios-xe-router-2:
   hostname: 10.0.0.111
   groups:
     - ios
+    - dev
 ios-xe-router-1:
   hostname: 10.0.0.110
   groups:
     - ios
+    - dev
+prod-ios-xe-2:
+  hostname: 10.0.0.211
+  groups:
+    - ios
+    - dev
+
+prod-ios-xe-1:
+  hostname: 10.0.0.210
+  groups:
+    - ios
+    - dev
