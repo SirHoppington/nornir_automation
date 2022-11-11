@@ -1,5 +1,5 @@
 from genie.testbed import load
-from pyats_config_clean import clean_ios_pyats
+from utilities.pyats_config_clean import clean_ios_pyats
 
 
 # load the testbed file

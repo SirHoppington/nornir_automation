@@ -4,8 +4,8 @@ from nornir_salt.plugins.functions import FFun
 from nornir_utils.plugins.functions import print_result
 from nornir_napalm.plugins.tasks import napalm_get, napalm_cli, napalm_configure
 from nornir.core.task import Task
-from check_config_changes import compare_changes
-from backup_script import post_change_backup
+from utilities.check_config_changes import compare_changes
+from utilities.backup_script import post_change_backup
 
 
 # Create config parser to set dry_run when running script
