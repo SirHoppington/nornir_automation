@@ -1,0 +1,51 @@
+devices:
+    ios-xe-router-1:
+        type: router
+        os: iosxe
+        alias: uut
+        credentials:
+            default:
+                username: admin
+                password: admin
+        connections:
+            ssh:
+                protocol: ssh
+                ip: 10.0.0.110
+
+    ios-xe-router-2:
+        type: router
+        os: iosxe
+        alias: ttt
+        credentials:
+            default:
+                username: admin
+                password: admin
+        connections:
+            ssh:
+                protocol: ssh
+                ip: 10.0.0.111
+    prod-ios-xe-1:
+        type: router
+        os: iosxe
+        alias: utt
+        credentials:
+            default:
+                username: admin
+                password: admin
+        connections:
+            ssh:
+                protocol: ssh
+                ip: 10.0.0.210
+
+    prod-ios-xe-2:
+        type: router
+        os: iosxe
+        alias: ttu
+        credentials:
+            default:
+                username: admin
+                password: admin
+        connections:
+            ssh:
+                protocol: ssh
+                ip: 10.0.0.211
