@@ -5,4 +5,6 @@ iosxe:
 ios:
     platform: 'ios'
 dev:
-    platform: 'ios'
+    data: "dev environment"
+prod:
+    prod: "prod environment"
