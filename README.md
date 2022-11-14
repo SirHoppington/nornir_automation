@@ -1,24 +1,13 @@
-# ci-cd-net
+# nornir_automation
 
-A repo to be used as a "Golden branch" for network device configuration as part of
-a Network DevOps CI/CD pipeline.
+Simple nornir docker container configured to:
 
-Nornir CI/CD Pipeline workflow:
+1. SSH to remote network devices contained within inventory/hosts.yaml using default credentials in default.yaml
 
-1. Engineer clones main repo.
+2. pull running configuration from inventory/hosts.yaml
 
-2. Engineer modifies configuration in "/crq_changes" and pushes to feature branch.
+3. Parse running config using TTP plugin and save interface config details as a new dictionary key/element for each nornir host.
 
-3. Webhook triggers Jenkins Pipeline.
-   1. Configuration pushed to Dev environment for only configs changed (diff on /crq_changes and /gold_config):
-      1. Dry-run of configuration changes run
-      2. Napalm/nornir send configuration changes to devices concurrently
-      3. Gold config is updated in feature branch to reflect config changes
+4. Use Jinja template to modify all access ports configured with vlan 10 and change to the new variable value, update trunk ports to reflect new vlan.
 
-### To be added:
-4. PyATS post test scripts run 
-   1. pull request made to main branch
-5. Peer review/CAB of proposed changes.
-6. Merge to main branch.
-7. Webhook triggers Jenkins Pipeline for Prod.
-   1. steps 3.i and 3.ii rerun
+5. Push configuration template to hosts specified in nornir inventory.
