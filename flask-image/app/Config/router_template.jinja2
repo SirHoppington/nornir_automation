@@ -1,0 +1,22 @@
+vlan 100
+vlan 200
+vlan 999
+
+{% for i in access_ports %}
+    {% if i['access_vlan'] == "10" %}
+    interface {{i['interface']}}
+    switchport access vlan 100
+    switchport voice vlan 200
+    {% endif %}
+{% endfor %}
+!
+{% for t in trunk_ports %}
+    interface {{t['interface']}}
+    switchport trunk vlan remove 10
+    switchport trunk vlan add 100
+{% endfor %}
+!
+{% for s in SVI %}
+    interface {{s['interface']}}
+    ip address {{s['ip_address']}} {{s['subnet']}}
+{% endfor %}
