@@ -1,8 +1,0 @@
-ios-router-1:
-  hostname: 10.0.0.111
-  groups:
-    - ios
-ios-xe-router-1:
-  hostname: 10.0.0.110
-  groups:
-    - ios

@@ -11,7 +11,7 @@ database.env
 postgres
 config.py
 /migrations
-
+*.bak
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
 # Byte-compiled / optimized / DLL files

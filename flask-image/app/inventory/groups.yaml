@@ -1,6 +1,0 @@
-# groups.yaml
----
-iosxe:
-    platform: 'iosxe'
-ios:
-    platform: 'ios'
