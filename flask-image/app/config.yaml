@@ -1,4 +1,4 @@
-# config.yaml
+# config.yaml contains inventory file details and runner info
 ---
 inventory:
        plugin: SimpleInventory
